@@ -17,6 +17,7 @@ func wait(n int) int {
 func syncro(durs []int) {
     start := time.Now()
 
+    // Loop over the calls and append results to slice
     results := make([]int, 0)
     for idx, val := range durs {
         fmt.Println(idx, fmt.Sprintf("seconds:%v", val))
@@ -31,6 +32,8 @@ func syncro(durs []int) {
 
 
 func asyncWait(n int, c chan int, wg *sync.WaitGroup) {
+    // Mark this branch as done after the function ends
+    // (has added the result to the channel after waiting)
     defer wg.Done()
 
     // wait n seconds
@@ -62,6 +65,7 @@ func async(durs []int) {
         close(c)
     }()
 
+    // As results stream in, add them to a slice
     results := make([]int, 0)
     for result := range c {
         fmt.Println("Got chan result:", result)
