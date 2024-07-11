@@ -1,0 +1,22 @@
+var certFile = gatewayClient.ToreroClient.Config.ServerCertificateFile
+var privateKeyFile = gatewayClient.ToreroClient.Config.ServerPrivateKeyFile
+			err := recoverAdmin(gatewayClient.ToreroClient)
+			checkError(err, gatewayClient.ToreroClient.Config.TerminalNoColor)
+		logger.Info("working directory is %s", gatewayClient.ToreroClient.Config.WorkingDir)
+		ensureOfAdmin(gatewayClient.ToreroClient)
+		if gatewayClient.GatewayConfig.ConnectEnabled {
+			gatewayClient.ConnectNotifier = notification.NewHandler()
+		if !gatewayClient.ToreroClient.Config.ServerIsAllInOne {
+			roundRobiner = robiner.NewRobiner(gatewayClient.ToreroClient.Store, gatewayClient.ToreroClient.Config.ClusterId)
+		handler.NewServer(gatewayClient.ToreroClient.Store, gatewayClient.ToreroClient.Config, gatewayClient.ConnectNotifier,
+			server.ListenAddress(gatewayClient.ToreroClient.Config.ServerListenAddress),
+			server.Port(gatewayClient.ToreroClient.Config.ServerPort),
+			server.UseTLS(gatewayClient.ToreroClient.Config.ServerUseTLS),
+		if gatewayClient.GatewayConfig.ConnectEnabled {
+			connector := connect.NewCommanderConnector(gatewayClient.ToreroClient.Store, gatewayClient.ToreroClient.Config, gatewayClient.GatewayConfig, gatewayClient.ConnectNotifier, roundRobiner)
+			if gatewayClient.GatewayConfig.ConnectServerHaEnabled {
+					gatewayClient.GatewayConfig.ConnectServerHaIsPrimary,
+					gatewayClient.ToreroClient.Config.ClusterId,
+					gatewayClient.ToreroClient.Config.StoreEtcdHosts,
+				checkError(err, gatewayClient.ToreroClient.Config.TerminalNoColor)
+return cli.CommandCheck(gatewayClient.ToreroClient.Config.Mode, cmd)
