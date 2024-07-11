@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"slices"
 	"strings"
 	"sync"
 	"time"
@@ -100,6 +101,38 @@ func longest(strs []string) string {
 	return longestString
 }
 
+func buildSpacing(sub string, strs []string) (string, int) {
+	dists := []int{}
+
+	for _, s := range strs {
+		start := strings.Index(s, sub)
+		dists = append(dists, start)
+	}
+
+	maxDist := slices.Max(dists)
+
+	fmt.Println("dists", dists)
+	fmt.Println("Found max dist:", maxDist)
+
+	output := ""
+	var longestLineLen int
+	for idx, s := range strs {
+		diff := maxDist - dists[idx]
+		prefix := strings.Repeat(" ", diff)
+
+		output += prefix
+		output += s
+		output += "\n"
+
+		totalLineLen := len(prefix) + len(s)
+		if totalLineLen > longestLineLen {
+			longestLineLen = totalLineLen
+		}
+	}
+
+	return output, longestLineLen
+}
+
 func readLines(path string) ([]string, error) {
     file, err := os.Open(path)
     if err != nil {
@@ -115,12 +148,13 @@ func readLines(path string) ([]string, error) {
     return lines, scanner.Err()
 }
 
+
 func main() {
 	// Process input
 	strs := make([]string, 0)
 	scanner := bufio.NewScanner(os.Stdin)
 	for scanner.Scan() {
-		scanned := scanner.Text()
+		scanned := strings.Replace(scanner.Text(), "\t", "    ", -1)
 		if len(strings.Trim(scanned, "*")) > 0 {
 			strs = append(strs, scanned)
 		}
@@ -136,15 +170,22 @@ func main() {
 
 	// Find longest substring
 	start := time.Now()
-	result := longest(strs)
+	longestSub := longest(strs)
 	runtime := time.Since(start)
 
+	spaceStart := time.Now()
+	spaced, longestLen := buildSpacing(longestSub, strs)
+	spaceRuntime := time.Since(spaceStart)
+
 	// Log the result
-	if result != "" {
-		fmt.Println("\nGot this final result:")
-		fmt.Println(result)
+	if longestSub != "" {
+		fmt.Println("\nGot this final result:\n")
+		fmt.Println(longestSub)
+		fmt.Println(fmt.Sprintf("\n%s\n", strings.Repeat("-", min(150, longestLen))))
+		fmt.Println(spaced)
 	} else {
 		fmt.Println("\nNo string matches found.")
 	}
-	fmt.Println("\nFinished in:", runtime)
+	fmt.Println("\nFinished in     :", runtime)
+	fmt.Println("Finished spacing:", spaceRuntime)
 }
